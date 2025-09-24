@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adoption Mapping Manager</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.global.prod.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-bg: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            --sidebar-bg: rgba(0, 0, 0, 0.2);
+            --text-primary: white;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --accent-color: #ff6b35;
+            --teal-color: #4a9b8e;
+            --card-bg: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="light"] {
+            --primary-bg: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            --sidebar-bg: rgba(255, 255, 255, 0.9);
+            --text-primary: #212529;
+            --text-secondary: rgba(33, 37, 41, 0.7);
+            --border-color: rgba(0, 0, 0, 0.1);
+            --accent-color: #ff6b35;
+            --teal-color: #20c997;
+            --card-bg: rgba(255, 255, 255, 0.8);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--primary-bg);
+            min-height: 100vh;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .top-header {
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .logo {
+            color: var(--text-primary);
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .logo .highlight {
+            color: var(--accent-color);
+        }
+
+        .mode-toggle-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .mode-toggle-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-right h1 {
+            color: var(--text-primary);
+            font-size: 28px;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .header-right h1 .highlight {
+            color: var(--accent-color);
+        }
+
+        .header-right h2 {
+            color: var(--teal-color);
+            font-size: 18px;
+            font-weight: normal;
+            text-align: right;
+            margin-top: 5px;
+        }
+
+        .main-layout {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--border-color);
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .edit-controls {
+            margin-bottom: 20px;
+        }
+
+        .theme-toggle {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .theme-toggle:hover {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .map-selector {
+            margin-bottom: 15px;
+        }
+
+        .map-selector select {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            font-size: 12px;
+        }
+
+        .admin-btn {
+            width: 100%;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background: var(--accent-color);
+            color: white;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .admin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .display-mode-selector {
+            margin-bottom: 15px;
+        }
+
+        .display-mode-selector label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .display-mode-selector select {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            font-size: 12px;
+        }
+
+        .sidebar-items {
+            flex: 1;
+        }
+
+        .sidebar-item {
+            margin-bottom: 8px;
+            padding: 12px 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .sidebar-item.legend-entitlement {
+            background: var(--teal-color);
+            color: white;
+        }
+
+        .sidebar-item.legend-in-use {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .sidebar-item.legend-foundry {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar-item.legend-roadmap {
+            background: #28a745;
+            color: white;
+        }
+
+        .sidebar-item.legend-outside {
+            background: #6f42c1;
+            color: white;
+        }
+
+        .sidebar-item.legend-ai {
+            background: #dc3545;
+            color: white;
+        }
+
+        .sidebar-item:hover:not(.no-hover) {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar-item .edit-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            font-size: 10px;
+            color: white;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar-item:hover .edit-btn {
+            opacity: 1;
+        }
+
+        .date-footer {
+            margin-top: auto;
+            padding-top: 20px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 12px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .adoption-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .section {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .section-title {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+            position: relative;
+        }
+
+        .section .edit-section-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent-color);
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            color: white;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .section:hover .edit-section-btn {
+            opacity: 1;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .item {
+            padding: 12px;
+            border-radius: 25px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            min-height: 60px;
+            justify-content: center;
+        }
+
+        .item-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            overflow: hidden;
+        }
+
+        .item-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .item:hover:not(.no-hover) {
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .item.entitlement {
+            background: linear-gradient(135deg, #4a9b8e, #26a69a);
+            color: white;
+        }
+
+        .item.in-use {
+            background: linear-gradient(135deg, #ff6b35, #f44336);
+            color: white;
+        }
+
+        .item.foundry {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            color: white;
+        }
+
+        .item.roadmap {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+        }
+
+        .item.outside {
+            background: linear-gradient(135deg, #6f42c1, #8e44ad);
+            color: white;
+        }
+
+        .item.ai {
+            background: linear-gradient(135deg, #dc3545, #e74c3c);
+            color: white;
+        }
+
+        .footer {
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--border-color);
+            padding: 15px 20px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--primary-bg);
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .close-btn {
+            background: #dc3545;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--teal-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .color-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .color-option.selected {
+            border-color: #ffd700;
+            transform: scale(1.2);
+        }
+
+        .color-option.entitlement { background: linear-gradient(135deg, #4a9b8e, #26a69a); }
+        .color-option.in-use { background: linear-gradient(135deg, #ff6b35, #f44336); }
+        .color-option.foundry { background: linear-gradient(135deg, #6c757d, #495057); }
+        .color-option.roadmap { background: linear-gradient(135deg, #28a745, #20c997); }
+        .color-option.outside { background: linear-gradient(135deg, #6f42c1, #8e44ad); }
+        .color-option.ai { background: linear-gradient(135deg, #dc3545, #e74c3c); }
+
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .tab-btn:not(.active) {
+            background: var(--card-bg);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .items-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px;
+            background: var(--card-bg);
+        }
+
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .item-row:last-child {
+            border-bottom: none;
+        }
+
+        .display-mode-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .display-mode-btn {
+            padding: 5px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            background: var(--card-bg);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .display-mode-btn.active {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        @media (max-width: 1024px) {
+            .adoption-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .sidebar {
+                width: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                max-height: 250px;
+            }
+            
+            .adoption-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app" :data-theme="theme">
+        <div class="app-container" v-if="!showAdmin">
+            <!-- Header Superior -->
+            <div class="top-header">
+                <div class="header-left">
+                    <div class="logo">ES<span class="highlight">M</span><span class="highlight">T</span></div>
+                    <button class="mode-toggle-btn" @click="toggleViewMode">
+                        {{ viewMode === 'edit' ? '👁️ Previsualizar' : '✏️ Editar' }}
+                    </button>
+                </div>
+                <div class="header-right">
+                    <h1>Adoption mapping <span class="highlight">{{ currentMap.code }}</span></h1>
+                    <h2>{{ currentMap.subtitle }}</h2>
+                </div>
+            </div>
+
+            <div class="main-layout">
+                <div class="sidebar">
+                    <!-- Controles de Edición (solo en modo editar) -->
+                    <div v-if="viewMode === 'edit'" class="edit-controls">
+                        <button class="theme-toggle" @click="toggleTheme">
+                            {{ theme === 'dark' ? '☀️ Modo Claro' : '🌙 Modo Oscuro' }}
+                        </button>
+                        
+                        <div class="map-selector" v-if="maps.length > 1">
+                            <select v-model="selectedMapId" @change="loadSelectedMap">
+                                <option v-for="map in maps" :key="map.id" :value="map.id">
+                                    {{ map.name }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <button class="admin-btn" @click="showAdmin = true">
+                            ⚙️ Administrar
+                        </button>
+
+                        <div class="display-mode-selector">
+                            <label>Mostrar Items:</label>
+                            <select v-model="globalDisplayMode" @change="updateGlobalDisplayMode">
+                                <option value="both">🖼️📝 Icono + Texto</option>
+                                <option value="icon">🖼️ Solo Iconos</option>
+                                <option value="text">📝 Solo Texto</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-items">
+                        <div 
+                            v-for="option in currentMap.sidebarOptions" 
+                            :key="option.id"
+                            :class="['sidebar-item', option.class, viewMode === 'preview' ? 'no-hover' : '']"
+                            @click="selectLegendColor(option)"
+                        >
+                            {{ option.label }}
+                            <button 
+                                v-if="viewMode === 'edit'" 
+                                class="edit-btn" 
+                                @click.stop="editSidebarOption(option)"
+                            >
+                                ✏️
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="date-footer">
+                        {{ currentDate }}
+                    </div>
+                </div>
+
+                <div class="main-content">
+                    <div class="content-area">
+                        <div class="adoption-grid">
+                            <div class="section" v-for="section in currentMap.sections" :key="section.id">
+                                <div class="section-title">{{ section.title }}</div>
+                                <button 
+                                    v-if="viewMode === 'edit'" 
+                                    class="edit-section-btn" 
+                                    @click="editSection(section)"
+                                >
+                                    ✏️
+                                </button>
+                                <div class="items-grid">
+                                    <div 
+                                        v-for="item in section.items" 
+                                        :key="item.id"
+                                        :class="['item', item.color, viewMode === 'preview' ? 'no-hover' : '']"
+                                        @click="viewMode === 'edit' ? toggleItem(item.id) : null"
+                                    >
+                                        <div 
+                                            v-if="item.displayMode === 'icon' || item.displayMode === 'both'" 
+                                            class="item-icon"
+                                        >
+                                            <img v-if="item.imageUrl" :src="item.imageUrl" :alt="item.name" />
+                                            <span v-else>{{ item.icon || '📊' }}</span>
+                                        </div>
+                                        <span v-if="item.displayMode === 'text' || item.displayMode === 'both'">
+                                            {{ item.name }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="footer">
+                        © {{ new Date().getFullYear() }} Adoption Mapping System. Todos los derechos reservados.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel Administrativo -->
+        <div v-if="showAdmin" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Panel Administrativo</h2>
+                    <button class="close-btn" @click="showAdmin = false">×</button>
+                </div>
+
+                <div class="admin-tabs">
+                    <button 
+                        v-for="tab in adminTabs" 
+                        :key="tab"
+                        :class="['tab-btn', { active: activeAdminTab === tab }]"
+                        @click="activeAdminTab = tab"
+                    >
+                        {{ tab }}
+                    </button>
+                </div>
+
+                <!-- Tab de Mapas -->
+                <div v-if="activeAdminTab === 'Mapas'">
+                    <div class="form-group">
+                        <label>Mapas Existentes</label>
+                        <div class="items-list">
+                            <div v-for="map in maps" :key="map.id" class="item-row">
+                                <span>{{ map.name }} ({{ map.code }})</span>
+                                <div>
+                                    <button class="btn btn-secondary" @click="editMap(map)">Editar</button>
+                                    <button class="btn btn-danger" @click="deleteMap(map.id)">Eliminar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" @click="createNewMap">+ Nuevo Mapa</button>
+                </div>
+
+                <!-- Tab de Sidebar -->
+                <div v-if="activeAdminTab === 'Sidebar'">
+                    <div class="form-group">
+                        <label>Opciones del Sidebar</label>
+                        <div class="items-list">
+                            <div v-for="option in currentMap.sidebarOptions" :key="option.id" class="item-row">
+                                <span>{{ option.label }}</span>
+                                <div>
+                                    <button class="btn btn-secondary" @click="editSidebarOption(option)">Editar</button>
+                                    <button class="btn btn-danger" @click="deleteSidebarOption(option.id)">Eliminar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" @click="createNewSidebarOption">+ Nueva Opción</button>
+                </div>
+
+                <!-- Tab de Secciones -->
+                <div v-if="activeAdminTab === 'Secciones'">
+                    <div class="form-group">
+                        <label>Secciones</label>
+                        <div class="items-list">
+                            <div v-for="section in currentMap.sections" :key="section.id" class="item-row">
+                                <span>{{ section.title }} ({{ section.items.length }} items)</span>
+                                <div>
+                                    <button class="btn btn-secondary" @click="editSection(section)">Editar</button>
+                                    <button class="btn btn-danger" @click="deleteSection(section.id)">Eliminar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" @click="createNewSection">+ Nueva Sección</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Edición -->
+        <div v-if="editingItem" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>{{ editingItem.type === 'map' ? 'Editar Mapa' : editingItem.type === 'sidebar' ? 'Editar Sidebar' : editingItem.type === 'section' ? 'Editar Sección' : 'Editar Item' }}</h3>
+                    <button class="close-btn" @click="closeEdit">×</button>
+                </div>
+
+                <!-- Editar Mapa -->
+                <div v-if="editingItem.type === 'map'">
+                    <div class="form-group">
+                        <label>Nombre del Mapa</label>
+                        <input v-model="editingItem.data.name" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Código</label>
+                        <input v-model="editingItem.data.code" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Subtítulo</label>
+                        <input v-model="editingItem.data.subtitle" type="text">
+                    </div>
+                </div>
+
+                <!-- Editar Sidebar -->
+                <div v-if="editingItem.type === 'sidebar'">
+                    <div class="form-group">
+                        <label>Etiqueta</label>
+                        <input v-model="editingItem.data.label" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Color</label>
+                        <div class="color-options">
+                            <div 
+                                v-for="color in sidebarColorOptions" 
+                                :key="color"
+                                :class="['color-option', color, { selected: editingItem.data.class === color }]"
+                                @click="editingItem.data.class = color"
+                            ></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Editar Sección -->
+                <div v-if="editingItem.type === 'section'">
+                    <div class="form-group">
+                        <label>Título de la Sección</label>
+                        <input v-model="editingItem.data.title" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Items</label>
+                        <div class="items-list">
+                            <div v-for="item in editingItem.data.items" :key="item.id" class="item-row">
+                                <span>{{ item.name }}</span>
+                                <div>
+                                    <button class="btn btn-secondary" @click="editItem(item)">Editar</button>
+                                    <button class="btn btn-danger" @click="deleteItem(editingItem.data.id, item.id)">Eliminar</button>
+                                
