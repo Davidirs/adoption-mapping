@@ -13,17 +13,6 @@
         }
 
         :root {
-            --primary-bg: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            --sidebar-bg: rgba(0, 0, 0, 0.2);
-            --text-primary: white;
-            --text-secondary: rgba(255, 255, 255, 0.8);
-            --border-color: rgba(255, 255, 255, 0.1);
-            --accent-color: #ff6b35;
-            --teal-color: #4a9b8e;
-            --card-bg: rgba(255, 255, 255, 0.1);
-        }
-
-        [data-theme="light"] {
             --primary-bg: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             --sidebar-bg: rgba(255, 255, 255, 0.9);
             --text-primary: #212529;
@@ -32,6 +21,17 @@
             --accent-color: #ff6b35;
             --teal-color: #20c997;
             --card-bg: rgba(255, 255, 255, 0.8);
+        }
+
+        [data-theme="dark"] {
+            --primary-bg: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            --sidebar-bg: rgba(0, 0, 0, 0.2);
+            --text-primary: white;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --accent-color: #ff6b35;
+            --teal-color: #4a9b8e;
+            --card-bg: rgba(255, 255, 255, 0.1);
         }
 
         body {
@@ -99,14 +99,6 @@
 
         .header-right h1 .highlight {
             color: var(--accent-color);
-        }
-
-        .header-right h2 {
-            color: var(--teal-color);
-            font-size: 18px;
-            font-weight: normal;
-            text-align: right;
-            margin-top: 5px;
         }
 
         .main-layout {
@@ -217,34 +209,19 @@
             position: relative;
         }
 
-        .sidebar-item.legend-entitlement {
-            background: var(--teal-color);
-            color: white;
-        }
-
-        .sidebar-item.legend-in-use {
+        .sidebar-item.active {
             background: var(--accent-color);
             color: white;
         }
 
-        .sidebar-item.legend-foundry {
-            background: rgba(255, 255, 255, 0.1);
+        .sidebar-item.inactive {
+            background: var(--card-bg);
             color: var(--text-secondary);
             border: 1px solid var(--border-color);
         }
 
-        .sidebar-item.legend-roadmap {
-            background: #28a745;
-            color: white;
-        }
-
-        .sidebar-item.legend-outside {
-            background: #6f42c1;
-            color: white;
-        }
-
-        .sidebar-item.legend-ai {
-            background: #dc3545;
+        .sidebar-item.teal {
+            background: var(--teal-color);
             color: white;
         }
 
@@ -272,6 +249,21 @@
 
         .sidebar-item:hover .edit-btn {
             opacity: 1;
+        }
+        .sidebar-item.primary {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .sidebar-item.secondary {
+            background: #6c757d;
+            color: white;
+        }        .header-right h2 {
+            color: var(--teal-color);
+            font-size: 18px;
+            font-weight: normal;
+            text-align: right;
+            margin-top: 5px;
         }
 
         .date-footer {
@@ -390,34 +382,24 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .item.entitlement {
-            background: linear-gradient(135deg, #4a9b8e, #26a69a);
-            color: white;
-        }
-
-        .item.in-use {
-            background: linear-gradient(135deg, #ff6b35, #f44336);
-            color: white;
-        }
-
-        .item.foundry {
+        .item.gray {
             background: linear-gradient(135deg, #6c757d, #495057);
             color: white;
         }
 
-        .item.roadmap {
-            background: linear-gradient(135deg, #28a745, #20c997);
+        .item.orange {
+            background: linear-gradient(135deg, #ff6b35, #f44336);
             color: white;
         }
 
-        .item.outside {
-            background: linear-gradient(135deg, #6f42c1, #8e44ad);
+        .item.teal {
+            background: linear-gradient(135deg, #4a9b8e, #26a69a);
             color: white;
         }
 
-        .item.ai {
-            background: linear-gradient(135deg, #dc3545, #e74c3c);
-            color: white;
+        .item.selected {
+            border-color: #ffd700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
         }
 
         .footer {
@@ -542,12 +524,9 @@
             transform: scale(1.2);
         }
 
-        .color-option.entitlement { background: linear-gradient(135deg, #4a9b8e, #26a69a); }
-        .color-option.in-use { background: linear-gradient(135deg, #ff6b35, #f44336); }
-        .color-option.foundry { background: linear-gradient(135deg, #6c757d, #495057); }
-        .color-option.roadmap { background: linear-gradient(135deg, #28a745, #20c997); }
-        .color-option.outside { background: linear-gradient(135deg, #6f42c1, #8e44ad); }
-        .color-option.ai { background: linear-gradient(135deg, #dc3545, #e74c3c); }
+        .color-option.gray { background: linear-gradient(135deg, #6c757d, #495057); }
+        .color-option.orange { background: linear-gradient(135deg, #ff6b35, #f44336); }
+        .color-option.teal { background: linear-gradient(135deg, #4a9b8e, #26a69a); }
 
         .admin-tabs {
             display: flex;
@@ -703,7 +682,7 @@
                             v-for="option in currentMap.sidebarOptions" 
                             :key="option.id"
                             :class="['sidebar-item', option.class, viewMode === 'preview' ? 'no-hover' : '']"
-                            @click="selectLegendColor(option)"
+                            @click="selectSidebarOption(option.id)"
                         >
                             {{ option.label }}
                             <button 
@@ -737,7 +716,7 @@
                                     <div 
                                         v-for="item in section.items" 
                                         :key="item.id"
-                                        :class="['item', item.color, viewMode === 'preview' ? 'no-hover' : '']"
+                                        :class="['item', item.color, { selected: selectedItems.includes(item.id) }, viewMode === 'preview' ? 'no-hover' : '']"
                                         @click="viewMode === 'edit' ? toggleItem(item.id) : null"
                                     >
                                         <div 
@@ -892,4 +871,476 @@
                                 <div>
                                     <button class="btn btn-secondary" @click="editItem(item)">Editar</button>
                                     <button class="btn btn-danger" @click="deleteItem(editingItem.data.id, item.id)">Eliminar</button>
-                                
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" @click="createNewItem(editingItem.data.id)">+ Nuevo Item</button>
+                </div>
+
+                <!-- Editar Item -->
+                <div v-if="editingItem.type === 'item'">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input v-model="editingItem.data.name" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de Icono</label>
+                        <div class="display-mode-options">
+                            <button 
+                                :class="['display-mode-btn', { active: editingItem.data.iconType === 'emoji' }]"
+                                @click="editingItem.data.iconType = 'emoji'"
+                            >
+                                😀 Emoji
+                            </button>
+                            <button 
+                                :class="['display-mode-btn', { active: editingItem.data.iconType === 'image' }]"
+                                @click="editingItem.data.iconType = 'image'"
+                            >
+                                🖼️ Imagen
+                            </button>
+                        </div>
+                    </div>
+                    <div v-if="editingItem.data.iconType === 'emoji'" class="form-group">
+                        <label>Icono (Emoji)</label>
+                        <input v-model="editingItem.data.icon" type="text" placeholder="📊">
+                    </div>
+                    <div v-if="editingItem.data.iconType === 'image'" class="form-group">
+                        <label>URL de la Imagen</label>
+                        <input v-model="editingItem.data.imageUrl" type="url" placeholder="https://example.com/image.png">
+                        <div v-if="editingItem.data.imageUrl" style="margin-top: 10px;">
+                            <img :src="editingItem.data.imageUrl" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Color</label>
+                        <div class="color-options">
+                            <div 
+                                v-for="color in itemColorOptions" 
+                                :key="color"
+                                :class="['color-option', color, { selected: editingItem.data.color === color }]"
+                                @click="editingItem.data.color = color"
+                            ></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Modo de Visualización</label>
+                        <div class="display-mode-options">
+                            <button 
+                                v-for="mode in displayModes" 
+                                :key="mode.value"
+                                :class="['display-mode-btn', { active: editingItem.data.displayMode === mode.value }]"
+                                @click="editingItem.data.displayMode = mode.value"
+                            >
+                                {{ mode.label }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <button class="btn btn-primary" @click="saveEdit">Guardar</button>
+                    <button class="btn btn-secondary" @click="closeEdit">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof Vue === 'undefined') {
+            console.error('Vue no está cargado correctamente');
+        }
+
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    theme: 'dark',
+                    viewMode: 'edit',
+                    globalDisplayMode: 'both',
+                    selectedItems: [],
+                    selectedMapId: 1,
+                    showAdmin: false,
+                    activeAdminTab: 'Mapas',
+                    editingItem: null,
+                    adminTabs: ['Mapas', 'Sidebar', 'Secciones'],
+                    sidebarColorOptions: ['active', 'inactive', 'teal', 'primary', 'secondary'],
+                    itemColorOptions: ['gray', 'orange', 'teal'],
+                    displayModes: [
+                        { value: 'text', label: '📝 Solo Texto' },
+                        { value: 'icon', label: '🖼️ Solo Icono' },
+                        { value: 'both', label: '📝🖼️ Texto + Icono' }
+                    ],
+                    maps: [
+                        {
+                            id: 1,
+                            name: 'Centro Colombo Americano',
+                            code: 'GC1',
+                            subtitle: 'Centro Colombo Americano',
+                            sidebarOptions: [
+                                { id: 'adoption-view', label: 'Adoption View', class: 'teal', originalClass: 'teal' },
+                                { id: 'gc-entitlement', label: 'GC ENTITLEMENT', class: 'teal', originalClass: 'teal' },
+                                { id: 'gc-entitlement-use', label: 'GC ENTITLEMENT IN USE', class: 'active', originalClass: 'active' },
+                                { id: 'app-foundry', label: 'APP FOUNDRY', class: 'inactive', originalClass: 'inactive' },
+                                { id: 'roadmap', label: 'ROADMAP', class: 'teal', originalClass: 'teal' },
+                                { id: 'outside-genesys', label: 'OUTSIDE GENESYS', class: 'inactive', originalClass: 'inactive' },
+                                { id: 'ai-experience', label: 'AI EXPERIENCE PAY PER CONSUME', class: 'inactive', originalClass: 'inactive' }
+                            ],
+                            sections: [
+                                {
+                                    id: 'channels',
+                                    title: 'Channels',
+                                    items: [
+                                        { id: 'voice', name: 'Voice', color: 'orange', icon: '📞', displayMode: 'both', iconType: 'emoji' },
+                                        { id: 'chat', name: 'Chat', color: 'gray', icon: '💬', displayMode: 'both', iconType: 'emoji' },
+                                        { id: 'messaging', name: 'Messaging', color: 'gray', icon: '📱', displayMode: 'both', iconType: 'emoji' },
+                                        { id: 'email', name: 'Email', color: 'gray', icon: '📧', displayMode: 'both', iconType: 'emoji' },
+                                        { id: 'whatsapp', name: 'WhatsApp', color: 'gray', icon: '📲', displayMode: 'both', iconType: 'emoji' },
+                                        { id: 'acd-voicemail', name: 'ACD Voicemail', color: 'gray', icon: '📞', displayMode: 'both', iconType: 'emoji' },
+                                        { id: 'video', name: 'Video', color: 'gray', icon: '📹', displayMode: 'both', iconType: 'emoji' },
+                                        { id: 'web', name: 'Web', color: 'gray', icon: '🌐', displayMode: 'both', iconType: 'emoji' },
+                                        { id: 'rrss', name: 'RRSS', color: 'gray', icon: '📱', displayMode: 'both', iconType: 'emoji' }
+                                    ]
+                                },
+                                {
+                                    id: 'automated-service',
+                                    title: 'Automated Service',
+                                    items: [
+                                        { id: 'voice-bot', name: 'Voice Bot', color: 'teal', icon: '🤖', displayMode: 'both' },
+                                        { id: 'chat-bot', name: 'Chat Bot', color: 'gray', icon: '💭', displayMode: 'both' },
+                                        { id: 'call-back', name: 'Call Back', color: 'teal', icon: '↩️', displayMode: 'both' },
+                                        { id: 'ivr', name: 'IVR', color: 'orange', icon: '📋', displayMode: 'both' },
+                                        { id: 'outbound-preview', name: 'Outbound Preview', color: 'teal', icon: '👁️', displayMode: 'both' },
+                                        { id: 'predictive-dialer', name: 'Predictive Dialer', color: 'gray', icon: '🎯', displayMode: 'both' }
+                                    ]
+                                },
+                                {
+                                    id: 'engagement-engine',
+                                    title: 'Engagement Engine',
+                                    items: [
+                                        { id: 'outbound-preview-prog', name: 'Outbound Preview Progressive', color: 'teal', icon: '📈', displayMode: 'both' },
+                                        { id: 'outbound-predictive', name: 'Outbound Predictive', color: 'teal', icon: '🔮', displayMode: 'both' },
+                                        { id: 'intelligent-routing', name: 'Intelligent Routing', color: 'teal', icon: '🧠', displayMode: 'both' },
+                                        { id: 'omnichannel-routing', name: 'Omnichannel Routing', color: 'gray', icon: '🔄', displayMode: 'both' },
+                                        { id: 'predictive-engagement', name: 'Predictive Engagement', color: 'teal', icon: '🎯', displayMode: 'both' }
+                                    ]
+                                },
+                                {
+                                    id: 'assist-services',
+                                    title: 'Assist Services',
+                                    items: [
+                                        { id: 'omnichannel-desktop', name: 'Omnichannel Desktop', color: 'teal', icon: '🖥️', displayMode: 'both' },
+                                        { id: 'script', name: 'Script', color: 'teal', icon: '📜', displayMode: 'both' },
+                                        { id: 'co-browse-screenshare', name: 'Co-browse Screenshare', color: 'gray', icon: '🖼️', displayMode: 'both' },
+                                        { id: 'agent-copilot', name: 'Agent Copilot', color: 'gray', icon: '👨‍✈️', displayMode: 'both' },
+                                        { id: 'virtual-agent', name: 'Virtual Agent', color: 'gray', icon: '🤖', displayMode: 'both' },
+                                        { id: 'supervisor-assignment', name: 'Supervisor Assignment', color: 'gray', icon: '👔', displayMode: 'both' }
+                                    ]
+                                },
+                                {
+                                    id: 'workforce-engagement',
+                                    title: 'Workforce Engagement',
+                                    items: [
+                                        { id: 'monitoring', name: 'Monitoring', color: 'orange', icon: '📊', displayMode: 'both' },
+                                        { id: 'quality-mgmt', name: 'Quality Mgmt', color: 'gray', icon: '⭐', displayMode: 'both' },
+                                        { id: 'recording', name: 'Recording', color: 'orange', icon: '🎵', displayMode: 'both' },
+                                        { id: 'wfm', name: 'WFM', color: 'gray', icon: '👥', displayMode: 'both' },
+                                        { id: 'dashboards', name: 'Dashboards', color: 'orange', icon: '📈', displayMode: 'both' },
+                                        { id: 'screen-recording', name: 'Screen Recording', color: 'gray', icon: '📺', displayMode: 'both' }
+                                    ]
+                                },
+                                {
+                                    id: 'analytics',
+                                    title: 'Analytics',
+                                    items: [
+                                        { id: 'task-routing', name: 'Task Routing', color: 'gray', icon: '📋', displayMode: 'both' },
+                                        { id: 'fabrication', name: 'Fabrication', color: 'gray', icon: '🔧', displayMode: 'both' },
+                                        { id: 'gamification', name: 'Gamification', color: 'gray', icon: '🎮', displayMode: 'both' },
+                                        { id: 'omnichannel-survey', name: 'Omnichannel Survey', color: 'gray', icon: '📝', displayMode: 'both' }
+                                    ]
+                                },
+                                {
+                                    id: 'back-office',
+                                    title: 'Back Office',
+                                    items: [
+                                        { id: 'unified-com', name: 'Unified Com', color: 'teal', icon: '🔗', displayMode: 'both' },
+                                        { id: 'omnichannel-analytics', name: 'Omnichannel Analytics', color: 'gray', icon: '📊', displayMode: 'both' },
+                                        { id: 'transcription', name: 'Transcription', color: 'gray', icon: '📄', displayMode: 'both' }
+                                    ]
+                                },
+                                {
+                                    id: 'platform',
+                                    title: 'Platform',
+                                    items: [
+                                        { id: 'knowledge', name: 'Knowledge', color: 'gray', icon: '🧠', displayMode: 'both' },
+                                        { id: 'speech-text-analytics', name: 'Speech & Text Analytics', color: 'gray', icon: '🎤', displayMode: 'both' },
+                                        { id: 'sentiment-analysis', name: 'Sentiment Analysis', color: 'gray', icon: '😊', displayMode: 'both' },
+                                        { id: 'repository', name: 'Repository', color: 'orange', icon: '📦', displayMode: 'both' },
+                                        { id: 'config', name: 'Config', color: 'orange', icon: '⚙️', displayMode: 'both' },
+                                        { id: 'apis', name: 'APIs', color: 'orange', icon: '🔌', displayMode: 'both' },
+                                        { id: 'custom-apps', name: 'Custom Apps', color: 'orange', icon: '📱', displayMode: 'both' }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            computed: {
+                currentMap() {
+                    return this.maps.find(map => map.id === this.selectedMapId) || this.maps[0];
+                },
+                currentDate() {
+                    const now = new Date();
+                    const months = [
+                        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+                    ];
+                    return `${months[now.getMonth()]} ${now.getFullYear()}`;
+                }
+            },
+            methods: {
+                toggleViewMode() {
+                    this.viewMode = this.viewMode === 'edit' ? 'preview' : 'edit';
+                },
+                setViewMode(mode) {
+                    this.viewMode = mode;
+                },
+                toggleTheme() {
+                    this.theme = this.theme === 'dark' ? 'light' : 'dark';
+                    // Aplicar el tema al elemento raíz
+                    document.documentElement.setAttribute('data-theme', this.theme);
+                },
+                updateGlobalDisplayMode() {
+                    // Actualizar el displayMode de todos los items
+                    this.currentMap.sections.forEach(section => {
+                        section.items.forEach(item => {
+                            item.displayMode = this.globalDisplayMode;
+                        });
+                    });
+                },
+                loadSelectedMap() {
+                    // Cargar el mapa seleccionado
+                },
+                toggleItem(itemId) {
+                    if (this.viewMode !== 'edit') return;
+                    
+                    const index = this.selectedItems.indexOf(itemId);
+                    if (index > -1) {
+                        this.selectedItems.splice(index, 1);
+                    } else {
+                        this.selectedItems.push(itemId);
+                    }
+                    
+                    // Cambiar color del item al hacer clic
+                    const allItems = [];
+                    this.currentMap.sections.forEach(section => {
+                        section.items.forEach(item => allItems.push(item));
+                    });
+                    
+                    const item = allItems.find(item => item.id === itemId);
+                    if (item) {
+                        const colors = ['gray', 'orange', 'teal'];
+                        const currentColorIndex = colors.indexOf(item.color);
+                        const nextColorIndex = (currentColorIndex + 1) % colors.length;
+                        item.color = colors[nextColorIndex];
+                    }
+                },
+                selectSidebarOption(optionId) {
+                    if (this.viewMode !== 'edit') return;
+                    
+                    // Solo marcar como activo, sin cambiar colores automáticamente
+                    this.currentMap.sidebarOptions.forEach(option => {
+                        if (option.id === optionId) {
+                            option.class = 'active';
+                        } else if (option.class === 'active') {
+                            // Mantener el color original o asignar uno por defecto
+                            option.class = option.originalClass || 'inactive';
+                        }
+                    });
+                },
+                
+                // Métodos de administración
+                createNewMap() {
+                    const newMap = {
+                        id: Date.now(),
+                        name: 'Nuevo Mapa',
+                        code: 'NEW',
+                        subtitle: 'Nuevo Mapa de Adopción',
+                        sidebarOptions: [
+                            { id: 'default-option', label: 'Opción Default', class: 'active' }
+                        ],
+                        sections: [
+                            {
+                                id: 'default-section',
+                                title: 'Sección Default',
+                                items: [
+                                    { id: 'default-item', name: 'Item Default', color: 'gray', icon: '📊', displayMode: 'both' }
+                                ]
+                            }
+                        ]
+                    };
+                    this.maps.push(newMap);
+                    this.editMap(newMap);
+                },
+                editMap(map) {
+                    this.editingItem = {
+                        type: 'map',
+                        data: { ...map }
+                    };
+                },
+                deleteMap(mapId) {
+                    if (this.maps.length === 1) {
+                        alert('No puedes eliminar el último mapa');
+                        return;
+                    }
+                    if (confirm('¿Estás seguro de eliminar este mapa?')) {
+                        const index = this.maps.findIndex(m => m.id === mapId);
+                        if (index > -1) {
+                            this.maps.splice(index, 1);
+                            if (this.selectedMapId === mapId) {
+                                this.selectedMapId = this.maps[0].id;
+                            }
+                        }
+                    }
+                },
+                
+                createNewSidebarOption() {
+                    const newOption = {
+                        id: 'new-' + Date.now(),
+                        label: 'Nueva Opción',
+                        class: 'inactive',
+                        originalClass: 'inactive'
+                    };
+                    this.currentMap.sidebarOptions.push(newOption);
+                    this.editSidebarOption(newOption);
+                },
+                editSidebarOption(option) {
+                    this.editingItem = {
+                        type: 'sidebar',
+                        data: { ...option }
+                    };
+                },
+                deleteSidebarOption(optionId) {
+                    if (confirm('¿Estás seguro de eliminar esta opción?')) {
+                        const index = this.currentMap.sidebarOptions.findIndex(o => o.id === optionId);
+                        if (index > -1) {
+                            this.currentMap.sidebarOptions.splice(index, 1);
+                        }
+                    }
+                },
+                
+                createNewSection() {
+                    const newSection = {
+                        id: 'section-' + Date.now(),
+                        title: 'Nueva Sección',
+                        items: []
+                    };
+                    this.currentMap.sections.push(newSection);
+                    this.editSection(newSection);
+                },
+                editSection(section) {
+                    this.editingItem = {
+                        type: 'section',
+                        data: { ...section, items: [...section.items] }
+                    };
+                },
+                deleteSection(sectionId) {
+                    if (confirm('¿Estás seguro de eliminar esta sección?')) {
+                        const index = this.currentMap.sections.findIndex(s => s.id === sectionId);
+                        if (index > -1) {
+                            this.currentMap.sections.splice(index, 1);
+                        }
+                    }
+                },
+                
+                createNewItem(sectionId) {
+                    const newItem = {
+                        id: 'item-' + Date.now(),
+                        name: 'Nuevo Item',
+                        color: 'gray',
+                        icon: '📊',
+                        iconType: 'emoji',
+                        imageUrl: '',
+                        displayMode: 'both'
+                    };
+                    
+                    const section = this.editingItem.data;
+                    section.items.push(newItem);
+                    this.editItem(newItem);
+                },
+                editItem(item) {
+                    this.editingItem = {
+                        type: 'item',
+                        data: { 
+                            ...item, 
+                            iconType: item.iconType || 'emoji',
+                            imageUrl: item.imageUrl || ''
+                        },
+                        parentSection: this.editingItem ? this.editingItem.data : null
+                    };
+                },
+                deleteItem(sectionId, itemId) {
+                    if (confirm('¿Estás seguro de eliminar este item?')) {
+                        const section = this.editingItem.data;
+                        const index = section.items.findIndex(i => i.id === itemId);
+                        if (index > -1) {
+                            section.items.splice(index, 1);
+                        }
+                    }
+                },
+                
+                saveEdit() {
+                    if (!this.editingItem) return;
+                    
+                    const { type, data } = this.editingItem;
+                    
+                    if (type === 'map') {
+                        const mapIndex = this.maps.findIndex(m => m.id === data.id);
+                        if (mapIndex > -1) {
+                            Object.assign(this.maps[mapIndex], data);
+                        }
+                    } else if (type === 'sidebar') {
+                        const optionIndex = this.currentMap.sidebarOptions.findIndex(o => o.id === data.id);
+                        if (optionIndex > -1) {
+                            // Guardar el color original cuando se edita
+                            data.originalClass = data.class;
+                            Object.assign(this.currentMap.sidebarOptions[optionIndex], data);
+                        }
+                    } else if (type === 'section') {
+                        const sectionIndex = this.currentMap.sections.findIndex(s => s.id === data.id);
+                        if (sectionIndex > -1) {
+                            Object.assign(this.currentMap.sections[sectionIndex], data);
+                        }
+                    } else if (type === 'item') {
+                        if (this.editingItem.parentSection) {
+                            const itemIndex = this.editingItem.parentSection.items.findIndex(i => i.id === data.id);
+                            if (itemIndex > -1) {
+                                Object.assign(this.editingItem.parentSection.items[itemIndex], data);
+                            }
+                        } else {
+                            // Buscar el item en todas las secciones
+                            this.currentMap.sections.forEach(section => {
+                                const itemIndex = section.items.findIndex(i => i.id === data.id);
+                                if (itemIndex > -1) {
+                                    Object.assign(section.items[itemIndex], data);
+                                }
+                            });
+                        }
+                    }
+                    
+                    this.closeEdit();
+                },
+                closeEdit() {
+                    this.editingItem = null;
+                }
+            },
+            mounted() {
+                // Establecer el tema por defecto al montar el componente
+                document.documentElement.setAttribute('data-theme', this.theme);
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
