@@ -74,7 +74,7 @@
         }
 
         .top-header {
-            background: var(--sidebar-bg);
+            background: #036172ce;
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border-color);
             padding: 15px 20px;
@@ -134,7 +134,7 @@
 
         .sidebar {
             width: 280px;
-            background: var(--sidebar-bg);
+            background: #036172ce;
             backdrop-filter: blur(10px);
             border-right: 1px solid var(--border-color);
             padding: 30px;
@@ -232,8 +232,8 @@
             font-size: 12px;
             font-weight: 500;
             position: relative;
-    text-align: center;
-    font-weight: bold;
+            text-align: center;
+            font-weight: bold;
         }
 
         .sidebar-item.active {
@@ -677,7 +677,7 @@
             <!-- Header Superior -->
             <div class="top-header">
                 <div class="header-left">
-                    <div class="logo">ES<span class="highlight">M</span><span class="highlight">T</span></div>
+                    <div class="logo">ESMT</div>
                     <button class="mode-toggle-btn" @click="toggleViewMode">
                         {{ viewMode === 'edit' ? '👁️ Previsualizar' : '✏️ Editar' }}
                     </button>
@@ -708,14 +708,14 @@
                             ⚙️ Administrar
                         </button>
 
-                        <div class="display-mode-selector">
+                        <!-- <div class="display-mode-selector">
                             <label>Mostrar Items:</label>
                             <select v-model="globalDisplayMode" @change="updateGlobalDisplayMode">
                                 <option value="both">🖼️📝 Icono + Texto</option>
                                 <option value="icon">🖼️ Solo Iconos</option>
                                 <option value="text">📝 Solo Texto</option>
                             </select>
-                        </div>
+                        </div> -->
                     </div>
 
                     <div class="text-center mb-5 text-verde-claro">
