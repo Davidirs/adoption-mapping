@@ -26,13 +26,13 @@
         }
 
         [data-theme="dark"] {
-            --primary-bg: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            --primary-bg: #036172;
             --sidebar-bg: rgba(0, 0, 0, 0.2);
             --text-primary: white;
             --text-secondary: rgba(255, 255, 255, 0.8);
             --border-color: rgba(255, 255, 255, 0.1);
             --accent-color: #FF5E00;
-            --teal-color: #197C88;
+            --teal-color: #20c997;
             --card-bg: rgba(255, 255, 255, 0.1);
         }
         .bg-verde-obscuro{
@@ -46,6 +46,9 @@
         }
         .bg-verde-claro{
             background-color: #5DBDB4;
+        }
+        .bg-transparent{
+            background-color: #5dbdb300;
         }
         .bg-palido{
             background-color: #FEF0E7;
@@ -367,7 +370,7 @@
 
         .items-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(9, 1fr);
             gap: 10px;
         }
 
@@ -566,6 +569,9 @@
 
         .color-option.teal {
             background: linear-gradient(135deg, #197C88, #26a69a);
+        }
+        .fs-large{
+            font-size: large;
         }
 
         .admin-tabs {
@@ -1010,93 +1016,79 @@
                                     title: 'Channels',
                                     items: [
                                         { id: 'voice', name: 'Voice', color: 'orange', icon: '📞', displayMode: 'both', iconType: 'emoji' },
-                                        { id: 'chat', name: 'Chat', color: 'bg-palido text-black', icon: '💬', displayMode: 'both', iconType: 'emoji' },
-                                        { id: 'messaging', name: 'Messaging', color: 'bg-palido text-black', icon: '📱', displayMode: 'both', iconType: 'emoji' },
-                                        { id: 'email', name: 'Email', color: 'bg-palido text-black', icon: '📧', displayMode: 'both', iconType: 'emoji' },
-                                        { id: 'whatsapp', name: 'WhatsApp', color: 'bg-palido text-black', icon: '📲', displayMode: 'both', iconType: 'emoji' },
-                                        { id: 'acd-voicemail', name: 'ACD Voicemail', color: 'bg-palido text-black', icon: '📞', displayMode: 'both', iconType: 'emoji' },
-                                        { id: 'video', name: 'Video', color: 'bg-palido text-black', icon: '📹', displayMode: 'both', iconType: 'emoji' },
-                                        { id: 'web', name: 'Web', color: 'bg-palido text-black', icon: '🌐', displayMode: 'both', iconType: 'emoji' },
-                                        { id: 'rrss', name: 'RRSS', color: 'bg-palido text-black', icon: '📱', displayMode: 'both', iconType: 'emoji' }
-                                    ]
-                                },
-                                {
-                                    id: 'automated-service',
-                                    title: 'Automated Service',
-                                    items: [
+                                        { id: 'sms', name: 'SMS', color: 'bg-palido text-black', icon: '💬', displayMode: 'both', iconType: 'emoji' },
                                         { id: 'voice-bot', name: 'Voice Bot', color: 'teal', icon: '🤖', displayMode: 'both' },
                                         { id: 'chat-bot', name: 'Chat Bot', color: 'bg-palido text-black', icon: '💭', displayMode: 'both' },
                                         { id: 'call-back', name: 'Call Back', color: 'teal', icon: '↩️', displayMode: 'both' },
+                                        { id: 'monitoring', name: 'Monitoring', color: 'orange', icon: '📊', displayMode: 'both' },
+                                        { id: 'analitycs', name: 'Analitycs', color: 'bg-transparent fs-large', icon: '📊', displayMode: 'text' },
+                                        { id: 'recording', name: 'Recording', color: 'orange', icon: '🎵', displayMode: 'both' },
+                                        { id: 'quality-mgmt', name: 'Quality Mgmt', color: 'bg-palido text-black', icon: '⭐', displayMode: 'both' },
+
+                                        { id: 'messaging', name: 'Messaging', color: 'bg-palido text-black', icon: '📱', displayMode: 'both', iconType: 'emoji' },
+                                        { id: 'email', name: 'Email', color: 'bg-palido text-black', icon: '📧', displayMode: 'both', iconType: 'emoji' },
                                         { id: 'ivr', name: 'IVR', color: 'orange', icon: '📋', displayMode: 'both' },
-                                        { id: 'outbound-preview', name: 'Outbound Preview', color: 'teal', icon: '👁️', displayMode: 'both' },
-                                        { id: 'predictive-dialer', name: 'Predictive Dialer', color: 'bg-palido text-black', icon: '🎯', displayMode: 'both' }
-                                    ]
-                                },
-                                {
-                                    id: 'engagement-engine',
-                                    title: 'Engagement Engine',
-                                    items: [
+                                        { id: 'outbound-agentless', name: 'Outbound Agentless', color: 'teal', icon: '👁️', displayMode: 'both' },
+                                        { id: 'predictive-engagement', name: 'Predictive Engagement', color: 'teal', icon: '🎯', displayMode: 'both' },
+                                        { id: 'wfm', name: 'WFM', color: 'bg-palido text-black', icon: '👥', displayMode: 'both' },
+                                        { id: 'bi', name: 'BI', color: 'bg-palido text-black', icon: '👥', displayMode: 'both' },
+                                        { id: 'dashboards', name: 'Dashboards', color: 'orange', icon: '📈', displayMode: 'both' },
+                                        { id: 'screen-recording', name: 'Screen Recording', color: 'bg-palido text-black', icon: '📺', displayMode: 'both' },
+                                        { id: 'whatsapp', name: 'WhatsApp', color: 'bg-palido text-black', icon: '📲', displayMode: 'both', iconType: 'emoji' },
+                                        { id: 'acd-voicemail', name: 'ACD Voicemail', color: 'bg-palido text-black', icon: '📞', displayMode: 'both', iconType: 'emoji' },
+                                        { id: 'engagement-engine', name: 'Engagement Engine', color: 'bg-transparent fs-large', icon: '🎯', displayMode: 'text' },
                                         { id: 'outbound-preview-prog', name: 'Outbound Preview Progressive', color: 'teal', icon: '📈', displayMode: 'both' },
                                         { id: 'outbound-predictive', name: 'Outbound Predictive', color: 'teal', icon: '🔮', displayMode: 'both' },
+                                        { id: 'task-routing', name: 'Task Routing', color: 'bg-palido text-black', icon: '📋', displayMode: 'both' },
+                                        { id: 'priorization ', name: 'priorization', color: 'bg-palido text-black', icon: '🔧', displayMode: 'both' },
+                                        { id: 'gamification', name: 'Gamification', color: 'bg-palido text-black', icon: '🎮', displayMode: 'both' },
+                                        { id: 'omnichannel-survey', name: 'Omnichannel Survey', color: 'bg-palido text-black', icon: '📝', displayMode: 'both' },
+                                        { id: 'video', name: 'Video', color: 'bg-palido text-black', icon: '📹', displayMode: 'both', iconType: 'emoji' },
+                                        { id: 'web', name: 'Web', color: 'bg-palido text-black', icon: '🌐', displayMode: 'both', iconType: 'emoji' },
                                         { id: 'intelligent-routing', name: 'Intelligent Routing', color: 'teal', icon: '🧠', displayMode: 'both' },
                                         { id: 'omnichannel-routing', name: 'Omnichannel Routing', color: 'bg-palido text-black', icon: '🔄', displayMode: 'both' },
-                                        { id: 'predictive-engagement', name: 'Predictive Engagement', color: 'teal', icon: '🎯', displayMode: 'both' }
-                                    ]
-                                },
-                                {
-                                    id: 'assist-services',
-                                    title: 'Assist Services',
-                                    items: [
+                                        
+                                        { id: 'predictive-routing', name: 'Predictive Routing', color: 'teal', icon: '🖥️', displayMode: 'both' },
+                                        { id: 'unified-com', name: 'Unified Com', color: 'teal', icon: '🔗', displayMode: 'both' },
+                                        { id: 'back-office', name: 'Back Office', color: 'bg-transparent fs-large', icon: '🔗', displayMode: 'text' },
+                                        { id: 'omnichannel-analytics', name: 'Omnichannel Analytics', color: 'bg-palido text-black', icon: '📊', displayMode: 'both' },
+                                        { id: 'transcription', name: 'Transcription', color: 'bg-palido text-black', icon: '📄', displayMode: 'both' },
+                                        { id: 'rrss', name: 'RRSS', color: 'bg-palido text-black', icon: '📱', displayMode: 'both', iconType: 'emoji' },
+                                        { id: '', name: '', color: 'bg-transparent fs-large', icon: '📱', displayMode: 'text', iconType: 'emoji' },
                                         { id: 'omnichannel-desktop', name: 'Omnichannel Desktop', color: 'teal', icon: '🖥️', displayMode: 'both' },
                                         { id: 'script', name: 'Script', color: 'teal', icon: '📜', displayMode: 'both' },
-                                        { id: 'co-browse-screenshare', name: 'Co-browse Screenshare', color: 'bg-palido text-black', icon: '🖼️', displayMode: 'both' },
-                                        { id: 'agent-copilot', name: 'Agent Copilot', color: 'bg-palido text-black', icon: '👨‍✈️', displayMode: 'both' },
                                         { id: 'virtual-agent', name: 'Virtual Agent', color: 'bg-palido text-black', icon: '🤖', displayMode: 'both' },
-                                        { id: 'supervisor-assignment', name: 'Supervisor Assignment', color: 'bg-palido text-black', icon: '👔', displayMode: 'both' }
-                                    ]
-                                },
-                                {
-                                    id: 'workforce-engagement',
-                                    title: 'Workforce Engagement',
-                                    items: [
-                                        { id: 'monitoring', name: 'Monitoring', color: 'orange', icon: '📊', displayMode: 'both' },
-                                        { id: 'quality-mgmt', name: 'Quality Mgmt', color: 'bg-palido text-black', icon: '⭐', displayMode: 'both' },
-                                        { id: 'recording', name: 'Recording', color: 'orange', icon: '🎵', displayMode: 'both' },
-                                        { id: 'wfm', name: 'WFM', color: 'bg-palido text-black', icon: '👥', displayMode: 'both' },
-                                        { id: 'dashboards', name: 'Dashboards', color: 'orange', icon: '📈', displayMode: 'both' },
-                                        { id: 'screen-recording', name: 'Screen Recording', color: 'bg-palido text-black', icon: '📺', displayMode: 'both' }
-                                    ]
-                                },
-                                {
-                                    id: 'analytics',
-                                    title: 'Analytics',
-                                    items: [
-                                        { id: 'task-routing', name: 'Task Routing', color: 'bg-palido text-black', icon: '📋', displayMode: 'both' },
-                                        { id: 'fabrication', name: 'Fabrication', color: 'bg-palido text-black', icon: '🔧', displayMode: 'both' },
-                                        { id: 'gamification', name: 'Gamification', color: 'bg-palido text-black', icon: '🎮', displayMode: 'both' },
-                                        { id: 'omnichannel-survey', name: 'Omnichannel Survey', color: 'bg-palido text-black', icon: '📝', displayMode: 'both' }
-                                    ]
-                                },
-                                {
-                                    id: 'back-office',
-                                    title: 'Back Office',
-                                    items: [
-                                        { id: 'unified-com', name: 'Unified Com', color: 'teal', icon: '🔗', displayMode: 'both' },
-                                        { id: 'omnichannel-analytics', name: 'Omnichannel Analytics', color: 'bg-palido text-black', icon: '📊', displayMode: 'both' },
-                                        { id: 'transcription', name: 'Transcription', color: 'bg-palido text-black', icon: '📄', displayMode: 'both' }
-                                    ]
-                                },
-                                {
-                                    id: 'platform',
-                                    title: 'Platform',
-                                    items: [
+                                        
                                         { id: 'knowledge', name: 'Knowledge', color: 'bg-palido text-black', icon: '🧠', displayMode: 'both' },
+                                        { id: 'platform', name: 'Platform', color: 'bg-transparent fs-large', icon: '🧠', displayMode: 'text' },
                                         { id: 'speech-text-analytics', name: 'Speech & Text Analytics', color: 'bg-palido text-black', icon: '🎤', displayMode: 'both' },
                                         { id: 'sentiment-analysis', name: 'Sentiment Analysis', color: 'bg-palido text-black', icon: '😊', displayMode: 'both' },
+                                        { id: 'channels', name: 'Channels', color: 'bg-transparent fs-large', icon: '😊', displayMode: 'text' },
+                                        { id: 'asist-services', name: 'Asist Services', color: 'bg-transparent fs-large', icon: '😊', displayMode: 'text' },
+                                        { id: 'agent-copilot', name: 'Agent Copilot', color: 'bg-palido text-black', icon: '👨‍✈️', displayMode: 'both' },
+                                        { id: 'journey-management', name: 'Journey Management', color: 'bg-palido text-black', icon: '👔', displayMode: 'both' },
+                                        { id: 'supervisor-assignment', name: 'Supervisor Assignment', color: 'bg-palido text-black', icon: '👔', displayMode: 'both' },
                                         { id: 'repository', name: 'Repository', color: 'orange', icon: '📦', displayMode: 'both' },
                                         { id: 'config', name: 'Config', color: 'orange', icon: '⚙️', displayMode: 'both' },
                                         { id: 'apis', name: 'APIs', color: 'orange', icon: '🔌', displayMode: 'both' },
-                                        { id: 'custom-apps', name: 'Custom Apps', color: 'orange', icon: '📱', displayMode: 'both' }
+                                        { id: 'custom-apps', name: 'Custom Apps', color: 'orange', icon: '📱', displayMode: 'both' },
+                                        
+                                        { id: 'bots', name: 'Bots', color: 'bg-blanco text-black', icon: '🖼️', displayMode: 'both' },
+                                        { id: 'fraud', name: 'Fraud', color: 'bg-blanco text-black', icon: '🖼️', displayMode: 'both' },
+                                        { id: 'pbx', name: 'PBX', color: 'bg-blanco text-black', icon: '🖼️', displayMode: 'both' },
+                                        { id: 'hr', name: 'HR', color: 'bg-blanco text-black', icon: '🖼️', displayMode: 'both' },
+                                        { id: 'collections', name: 'Collections', color: 'bg-blanco text-black', icon: '🖼️', displayMode: 'both' },
+                                        { id: 'marketing', name: 'Marketing', color: 'bg-blanco text-black', icon: '🖼️', displayMode: 'both' },
+                                        { id: 'crm', name: 'CRM', color: 'bg-blanco text-black', icon: '🖼️', displayMode: 'both' },
+                                        { id: 'warehouse', name: 'Warehouse', color: 'bg-blanco text-black', icon: '🖼️', displayMode: 'both' },
+                                        { id: 'lake', name: 'Lake', color: 'bg-blanco text-black', icon: '🖼️', displayMode: 'both' },
+                                        
+                                    
+                                    
+                                    
+                                    
+                                  
+                                
                                     ]
                                 }
                             ]
@@ -1158,7 +1150,7 @@
 
                     const item = allItems.find(item => item.id === itemId);
                     if (item) {
-                        const colors = ['bg-verde-obscuro', 'bg-naranja', 'bg-gris text-black', 'bg-verde-claro', 'bg-palido  text-black', 'bg-white  text-black'];
+                        const colors = ['bg-verde-obscuro', 'bg-naranja', 'bg-gris text-black', 'bg-verde-claro', 'bg-palido  text-black', 'bg-white  text-black','bg-transparent'];
                         const currentColorIndex = colors.indexOf(item.color);
                         const nextColorIndex = (currentColorIndex + 1) % colors.length;
                         item.color = colors[nextColorIndex];
